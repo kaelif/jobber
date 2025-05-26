@@ -78,7 +78,7 @@ function App() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-6 max-w-3xl mx-auto bg-gray-50 min-h-screen">
       <Toaster />
       <h1 className="text-2xl font-bold mb-4">Semantic Version & Spiral Generator</h1>
       <input
