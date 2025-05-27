@@ -1,11 +1,9 @@
-/* Base Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* Font and layout */
   body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background-color: #f9f9f9;
@@ -18,7 +16,6 @@
     min-height: 100vh;
   }
   
-  /* Container for app content */
   .app-container {
     background-color: #ffffff;
     padding: 2rem;
@@ -28,13 +25,11 @@
     width: 100%;
   }
   
-  /* Headings */
   h1, h2 {
     margin-bottom: 1rem;
     font-weight: 600;
   }
   
-  /* Input & button styling */
   input[type="text"], input[type="number"] {
     width: 100%;
     padding: 0.75rem;
@@ -50,7 +45,6 @@
     outline: none;
   }
   
-  /* Button styling */
   button {
     background-color: #007acc;
     color: white;
@@ -67,7 +61,6 @@
     background-color: #005fa3;
   }
   
-  /* Result output */
   .output {
     margin-top: 1.5rem;
     padding: 1rem;
@@ -77,19 +70,3 @@
     font-family: monospace;
     white-space: pre-wrap;
   }
-  
-  /* Optional: Spiral grid */
-  .grid {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-  
-  .grid-cell {
-    background-color: #e2e8f0;
-    padding: 0.75rem;
-    text-align: center;
-    border-radius: 6px;
-    font-weight: bold;
-  }
-  

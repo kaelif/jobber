@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import './App.css';
 
@@ -44,37 +44,41 @@ function App() {
   const handleSubmit = () => {
     const trimmed = input.trim();
 
-    if (/^\d+$/.test(trimmed)) {
-      const num = parseInt(trimmed, 10);
-      const spiral = createSpiral(num);
-      const version = nextVersion(trimmed);
-      setOutput({ version, spiral, flatSpiral: flattenSpiral(spiral) });
-
-    } else if (/^\d+(,\d+)*$/.test(trimmed)) {
-      const nums = trimmed.split(',').map(Number);
-      const N = nums[0];
-      if (N < 1) {
-        setOutput({ spiral: [], flatSpiral: [] });
-        return;
-      }
-      const spiral = createSpiral(N);
-      setOutput({ spiral, flatSpiral: flattenSpiral(spiral) });
-
-    } else if (/^\d+(\.\d+)*$/.test(trimmed)) {
-      const parts = trimmed.split('.');
-
-      // Check if any part after the first has 2+ digits
-      const invalid = parts.slice(1).some(part => part.length > 1);
-      if (invalid) {
-        toast.error('Version parts after the first must be single-digit (e.g., 1.2.3 is okay, 1.22.3 is not).');
-        return;
-      }
-
-      setOutput({ version: nextVersion(trimmed) });
-
-    } else {
-      toast.error('Invalid input. Use "1.2.3" for versioning or "3,3,3" for spiral.');
+    if (trimmed.includes(',')) {
+      toast.error('Comma-separated values are not allowed.');
+      return;
     }
+
+    if (!trimmed.includes('.')) {
+      const num = Number(trimmed);
+      if (Number.isInteger(num) && num > 0 && trimmed === String(num)) {
+        const spiral = createSpiral(num);
+        const version = nextVersion(trimmed);
+        setOutput({ version, spiral, flatSpiral: flattenSpiral(spiral) });
+        return;
+      }
+    }
+
+    if (trimmed.includes('.') && !trimmed.includes(',')) {
+      const parts = trimmed.split('.');
+      const nums = parts.map(p => Number(p));
+      const allValid = parts.every((p, i) => {
+        const n = nums[i];
+        return Number.isInteger(n) && p === String(n);
+      });
+
+      if (allValid) {
+        const invalid = parts.slice(1).some(p => p.length > 1);
+        if (invalid) {
+          toast.error('Version parts after the first must be single-digit (e.g., 1.2.3 is okay, 1.22.3 is not).');
+          return;
+        }
+        setOutput({ version: nextVersion(trimmed) });
+        return;
+      }
+    }
+
+    toast.error('Invalid input. Use a version like "1.2.3" or a single number like "3".');
   };
 
   return (
@@ -85,7 +89,7 @@ function App() {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder='Enter "1.2.3" or "3,3,3" or "3"'
+        placeholder='Enter "1.2.3" or "3"'
         className="border p-2 rounded w-full mb-4"
       />
       <button
@@ -111,11 +115,6 @@ function App() {
           >
             {renderSpiral(output.spiral)}
           </pre>
-
-          <h2 className="font-semibold mt-4">Spiral Output (List):</h2>
-          <div className="bg-white p-2 rounded border text-sm">
-            [{output.flatSpiral?.join(', ')}]
-          </div>
         </>
       )}
     </div>
